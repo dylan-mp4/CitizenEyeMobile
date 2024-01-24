@@ -114,12 +114,12 @@ class FileUploadPageState extends State<FileUploadPage> {
                         // User canceled the picker
                       }
                     },
-                    child: const Text('Select and Upload Video'),
+                    child: const Text('Process App Video'),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: displayResults,
-                    child: const Text('Upload and Process Video'),
+                    child: const Text('Process External Video'),
                   ),
                 ],
               ),
@@ -131,19 +131,35 @@ class FileUploadPageState extends State<FileUploadPage> {
             ),
             const SizedBox(height: 8),
             Expanded(
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('License Plate')),
-                  DataColumn(label: Text('Score')),
-                ],
-                rows: results
-                    .map((result) => DataRow(cells: [
-                          DataCell(Text(result['License Plate'] ?? '')),
-                          DataCell(Text(result['Score'].toString())),
-                        ]))
-                    .toList(),
-              ),
-            ),
+  child: SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+    child: DataTable(
+      columns: const <DataColumn>[
+        DataColumn(
+          label: Text(
+            'License Plate',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Score',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+      ],
+      rows: results.map<DataRow>((result) => DataRow(
+        cells: <DataCell>[
+          DataCell(Text(result['License Plate'] ?? 'N/A')), // Replace 'licensePlate' with the actual key
+          DataCell(Text((result['Score'] ?? 'N/A').toString())), // Replace 'score' with the actual key
+        ],
+      )).toList(),
+    ),
+  ),
+  ),
+),
           ],
         ),
       ),

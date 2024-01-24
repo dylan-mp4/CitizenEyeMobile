@@ -26,7 +26,7 @@ class SettingsPage extends StatelessWidget {
               onChanged: (value) {
                 Provider.of<SettingsData>(context, listen: false).updateIpAddress(value);
                 if (kDebugMode) {
-                  print(value);
+                  print("Server IP changed:$value");
                 }
               },
             ),
@@ -41,7 +41,7 @@ class SettingsPage extends StatelessWidget {
               onChanged: (value) {
                 Provider.of<SettingsData>(context, listen: false).updateAuthToken(value);
                 if (kDebugMode) {
-                  print(value);
+                  print("Auth value changed:$value");
                 }
               },
             ),
@@ -56,6 +56,18 @@ class SettingsPage extends StatelessWidget {
                 ),
               );
             },
+          ),
+          ListTile(
+            title: const Text('Auto Upload'),
+            trailing: Switch(
+              value: Provider.of<SettingsData>(context).autoUpload,
+              onChanged: (value) {
+                Provider.of<SettingsData>(context, listen: false).updateAutoUpload(value);
+                if (kDebugMode) {
+                  print("Auto upload:$value");
+                }
+              },
+            ),
           ),
         ],
       ),
