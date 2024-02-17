@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'fileupload.dart';
 import 'package:provider/provider.dart';
 import 'settings_data.dart';
+import 'results.dart';
 
 
 class SettingsPage extends StatelessWidget {
@@ -16,6 +17,17 @@ class SettingsPage extends StatelessWidget {
       ),
       body: ListView(
         children: <Widget>[
+          ListTile(
+            title: const Text('Results'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResultsPage(),
+                ),
+              );
+            },
+          ),
           ListTile(
             title: const Text('Server IP Address'),
             subtitle: TextField(

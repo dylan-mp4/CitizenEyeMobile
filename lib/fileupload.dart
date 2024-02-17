@@ -17,7 +17,7 @@ class FileUploadPage extends StatefulWidget {
 
 class FileUploadPageState extends State<FileUploadPage> {
   List<Map<String, dynamic>> results = [];
-  void displayResults() async {
+  Future<void> displayResults() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -152,8 +152,8 @@ class FileUploadPageState extends State<FileUploadPage> {
       ],
       rows: results.map<DataRow>((result) => DataRow(
         cells: <DataCell>[
-          DataCell(Text(result['License Plate'] ?? 'N/A')), // Replace 'licensePlate' with the actual key
-          DataCell(Text((result['Score'] ?? 'N/A').toString())), // Replace 'score' with the actual key
+          DataCell(Text(result['License Plate'] ?? 'N/A')), 
+          DataCell(Text((result['Score'] ?? 'N/A').toString())),
         ],
       )).toList(),
     ),
