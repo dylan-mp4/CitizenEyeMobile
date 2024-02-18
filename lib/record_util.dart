@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'package:projects/settings_data.dart';
+import 'package:citizen_eye/settings_data.dart';
 
 class RecordingUtil {
   CameraController? controller;

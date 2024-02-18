@@ -1,7 +1,7 @@
 
 // import 'package:flutter/material.dart';
 // import 'package:http_parser/http_parser.dart';
-// import 'package:projects/settings_data.dart';
+// import 'package:citizen_eye/settings_data.dart';
 // import 'package:provider/provider.dart';
 // import 'settings.dart';
 // import 'dart:async';

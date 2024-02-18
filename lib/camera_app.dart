@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:projects/settings.dart';
-import 'package:projects/record_util.dart';
-import 'package:projects/settings_data.dart';
+import 'settings.dart';
+import 'package:citizen_eye/record_util.dart';
+import 'package:citizen_eye/settings_data.dart';
 import 'package:provider/provider.dart';
 
 class CameraApp extends StatefulWidget {

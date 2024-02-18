@@ -7,6 +7,7 @@ class SettingsData extends ChangeNotifier {
   String _ipAddress = '';
   String _authToken = '';
   bool _autoUpload = false;
+  bool _firstTime = true;
   List<Map<String, dynamic>> _results = [];
 
 SettingsData() {
@@ -16,6 +17,7 @@ SettingsData() {
 }
 
   bool get autoUpload => _autoUpload;
+  bool get firstTime => _firstTime;
   String get ipAddress => _ipAddress;
   String get authToken => _authToken;
   List<Map<String, dynamic>> get results => _results;
@@ -37,7 +39,11 @@ SettingsData() {
     savePreferences();
     notifyListeners();
   }
-
+  void updateFirstTime(bool value) {
+    _firstTime = value;
+    savePreferences();
+    notifyListeners();
+  }
   void addResult(List<dynamic> data) {
     for (var item in data) {
     if (item is Map<String, dynamic>) {
@@ -73,6 +79,7 @@ Future<void> savePreferences() async {
     prefs.setString('ipAddress', _ipAddress);
     prefs.setString('authToken', _authToken);
     prefs.setBool('autoUpload', _autoUpload);
+    prefs.setBool('firstTime', _firstTime);
     String resultsJson = jsonEncode(_results);
     prefs.setString('results', resultsJson);
   } catch (e) {
@@ -88,6 +95,7 @@ Future<void> loadPreferences() async {
     _ipAddress = prefs.getString('ipAddress') ?? '';
     _authToken = prefs.getString('authToken') ?? '';
     _autoUpload = prefs.getBool('autoUpload') ?? true;
+    _firstTime = prefs.getBool('firstTime') ?? true;
     String resultsJson = prefs.getString('results') ?? '[]';
     _results = List<Map<String, dynamic>>.from(jsonDecode(resultsJson));
   } catch (e) {
