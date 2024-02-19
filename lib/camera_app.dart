@@ -17,6 +17,10 @@ class CameraApp extends StatefulWidget {
   CameraAppState createState() => CameraAppState();
 }
 
+/// The state class for the [CameraApp] widget.
+///
+/// This class manages the state of the camera app, including the recording status,
+/// camera controller, and widget initialization.
 class CameraAppState extends State<CameraApp> {
   bool isRecording = false;
   RecordingUtil? recordingUtil;

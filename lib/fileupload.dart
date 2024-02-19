@@ -7,7 +7,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
-
+/// A page for uploading and processing video files.
+///
+/// This page allows the user to upload a video file, either from the app's storage or from an external source.
+/// The uploaded video file is sent to a server for processing, and the results are displayed in a table.
 class FileUploadPage extends StatefulWidget {
   const FileUploadPage({super.key});
 
@@ -17,6 +20,13 @@ class FileUploadPage extends StatefulWidget {
 
 class FileUploadPageState extends State<FileUploadPage> {
   List<Map<String, dynamic>> results = [];
+
+  /// Displays the results of the video processing.
+  ///
+  /// This method is called when the "Process External Video" button is pressed.
+  /// It prompts the user to select a video file from an external source,
+  /// sends the selected file to the server for processing,
+  /// and updates the results list with the processed data.
   Future<void> displayResults() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -131,35 +141,35 @@ class FileUploadPageState extends State<FileUploadPage> {
             ),
             const SizedBox(height: 8),
             Expanded(
-  child: SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-    child: DataTable(
-      columns: const <DataColumn>[
-        DataColumn(
-          label: Text(
-            'License Plate',
-            style: TextStyle(fontStyle: FontStyle.italic),
-          ),
-        ),
-        DataColumn(
-          label: Text(
-            'Score',
-            style: TextStyle(fontStyle: FontStyle.italic),
-          ),
-        ),
-      ],
-      rows: results.map<DataRow>((result) => DataRow(
-        cells: <DataCell>[
-          DataCell(Text(result['License Plate'] ?? 'N/A')), 
-          DataCell(Text((result['Score'] ?? 'N/A').toString())),
-        ],
-      )).toList(),
-    ),
-  ),
-  ),
-),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: DataTable(
+                    columns: const <DataColumn>[
+                      DataColumn(
+                        label: Text(
+                          'License Plate',
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Score',
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ],
+                    rows: results.map<DataRow>((result) => DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(result['License Plate'] ?? 'N/A')),
+                        DataCell(Text((result['Score'] ?? 'N/A').toString())),
+                      ],
+                    )).toList(),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

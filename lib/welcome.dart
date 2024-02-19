@@ -2,14 +2,22 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:citizen_eye/camera_app.dart';
 
+/// This class represents the welcome screen of the app.
+/// It is a stateful widget that displays a series of pages with images, titles, and content.
+/// The user can navigate through the pages using the "Back" and "Next" buttons.
+/// When the user reaches the last page, they can continue to the next screen.
 class WelcomeScreen extends StatefulWidget {
   final CameraDescription firstCamera;
+
+  /// Constructs a new instance of the [WelcomeScreen] class.
+  /// The [firstCamera] parameter is required and represents the camera description.
   WelcomeScreen({required this.firstCamera});
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
+/// This class represents the state of the [WelcomeScreen].
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final controller = PageController();
   final pages = [

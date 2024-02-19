@@ -6,11 +6,14 @@ import 'settings_data.dart';
 import 'results.dart';
 
 
+/// Represents the settings page of the application.
+/// Allows the user to configure various settings such as server IP address, authentication token, and auto upload feature.
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Build the settings page UI using Scaffold widget
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -20,6 +23,7 @@ class SettingsPage extends StatelessWidget {
           ListTile(
             title: const Text('Results'),
             onTap: () {
+              // Navigate to the results page when the "Results" item is tapped
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -36,6 +40,7 @@ class SettingsPage extends StatelessWidget {
                 hintText: 'Enter IP Address',
               ),
               onChanged: (value) {
+                // Update the server IP address in the settings data provider
                 Provider.of<SettingsData>(context, listen: false).updateIpAddress(value);
                 if (kDebugMode) {
                   print("Server IP changed:$value");
@@ -51,6 +56,7 @@ class SettingsPage extends StatelessWidget {
                 hintText: 'Enter Auth Token',
               ),
               onChanged: (value) {
+                // Update the authentication token in the settings data provider
                 Provider.of<SettingsData>(context, listen: false).updateAuthToken(value);
                 if (kDebugMode) {
                   print("Auth value changed:$value");
@@ -61,6 +67,7 @@ class SettingsPage extends StatelessWidget {
           ListTile(
             title: const Text('Manual Video Upload'),
             onTap: () {
+              // Navigate to the file upload page when the "Manual Video Upload" item is tapped
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -74,6 +81,7 @@ class SettingsPage extends StatelessWidget {
             trailing: Switch(
               value: Provider.of<SettingsData>(context).autoUpload,
               onChanged: (value) {
+                // Update the auto upload setting in the settings data provider
                 Provider.of<SettingsData>(context, listen: false).updateAutoUpload(value);
                 if (kDebugMode) {
                   print("Auto upload:$value");

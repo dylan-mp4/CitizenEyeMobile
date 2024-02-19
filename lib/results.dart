@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'settings_data.dart';
 
+/// A page that displays the results of a search or analysis.
 class ResultsPage extends StatefulWidget {
   const ResultsPage({super.key});
 
@@ -9,14 +10,17 @@ class ResultsPage extends StatefulWidget {
   ResultsPageState createState() => ResultsPageState();
 }
 
+/// The state of the [ResultsPage] widget.
 class ResultsPageState extends State<ResultsPage> {
   String dropdownValue = 'License Plate A-Z';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Results'),
         actions: <Widget>[
+          // Dropdown button to select sorting option
           DropdownButton<String>(
             value: dropdownValue,
             onChanged: (String? newValue) {
@@ -36,6 +40,7 @@ class ResultsPageState extends State<ResultsPage> {
               );
             }).toList(),
           ),
+          // Button to clear all data
           IconButton(
             icon: const Icon(Icons.delete_forever),
             onPressed: () {
@@ -118,6 +123,7 @@ class ResultsPageState extends State<ResultsPage> {
   }
 }
 
+/// A page that displays the details of a specific result.
 class ResultDetailsPage extends StatefulWidget {
   final Map<String, dynamic> result;
 
@@ -127,6 +133,7 @@ class ResultDetailsPage extends StatefulWidget {
   _ResultDetailsPageState createState() => _ResultDetailsPageState();
 }
 
+/// The state of the [ResultDetailsPage] widget.
 class _ResultDetailsPageState extends State<ResultDetailsPage> {
   @override
   Widget build(BuildContext context) {
@@ -134,6 +141,7 @@ class _ResultDetailsPageState extends State<ResultDetailsPage> {
       appBar: AppBar(
         title: const Text('Result Details'),
         actions: [
+          // Button to remove the result
           IconButton(
             icon: const Icon(Icons.delete_forever),
             onPressed: () {

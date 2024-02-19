@@ -4,8 +4,19 @@ import 'settings_data.dart';
 import 'package:camera/camera.dart';
 import 'camera_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'welcome.dart';  
+import 'welcome.dart';
 
+/// The main entry point of the application.
+///
+/// This function initializes the Flutter application and sets up the necessary bindings.
+/// It retrieves the value of 'firstTime' from shared preferences and determines whether to display the WelcomeScreen or the CameraApp.
+/// If 'firstTime' is null or true, the WelcomeScreen is displayed, otherwise the CameraApp is displayed.
+///
+/// Parameters:
+///   - None
+///
+/// Returns:
+///   - None
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -24,11 +35,13 @@ void main() async {
             // If it's the first time, display the WelcomeScreen
             // Otherwise, display the CameraApp
             return MaterialApp(
-  home: isFirstTime ?? true ? WelcomeScreen(firstCamera: firstCamera) : CameraApp(camera: firstCamera),
+              home: isFirstTime ?? true
+                  ? WelcomeScreen(firstCamera: firstCamera)
+                  : CameraApp(camera: firstCamera),
             );
           } else {
-            return MaterialApp(
-              home: const CircularProgressIndicator(),
+            return const MaterialApp(
+              home: CircularProgressIndicator(),
             );
           }
         },
