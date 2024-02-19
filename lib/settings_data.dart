@@ -113,7 +113,9 @@ class SettingsData extends ChangeNotifier {
         _results[i]['index'] = i;
       }
     } else {
-      print('No result found at the provided index');
+      if (kDebugMode) {
+        print('No result found at the provided index');
+      }
     }
     notifyListeners();
   }

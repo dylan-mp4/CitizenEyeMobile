@@ -30,12 +30,10 @@ class RecordingUtil {
   Future<void> startRecording(settingsData) async {
     await controller!.startVideoRecording();
     startLocation = await locationService.getLocation();
-    print(startLocation);
     Timer(const Duration(minutes: 1), () async {
       if (controller != null && controller!.value.isRecordingVideo) {
         XFile videoFile = await controller!.stopVideoRecording();
         endLocation = await locationService.getLocation();
-        print(endLocation);
         videoPaths.add(videoFile.path);
         if (settingsData.autoUpload) {
           uploadVideo(videoFile.path, settingsData, startLocation, endLocation);
