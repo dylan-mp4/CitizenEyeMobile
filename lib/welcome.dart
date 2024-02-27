@@ -11,7 +11,7 @@ class WelcomeScreen extends StatefulWidget {
 
   /// Constructs a new instance of the [WelcomeScreen] class.
   /// The [firstCamera] parameter is required and represents the camera description.
-  WelcomeScreen({required this.firstCamera});
+  const WelcomeScreen({super.key, required this.firstCamera});
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -79,7 +79,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.ease);
                       },
-                      child: Text('Back'),
+                      child: const Text('Back'),
                     ),
                   ElevatedButton(
                     onPressed: () {

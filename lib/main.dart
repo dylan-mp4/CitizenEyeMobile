@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'settings_data.dart';
+import 'fileupload.dart'; // Import the UploadModel
 import 'package:camera/camera.dart';
 import 'camera_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'welcome.dart';
-
 /// The main entry point of the application.
 ///
 /// This function initializes the Flutter application and sets up the necessary bindings.
@@ -24,14 +24,16 @@ void main() async {
   bool? isFirstTime = prefs.getBool('firstTime');
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => SettingsData(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SettingsData()),
+        ChangeNotifierProvider(create: (context) => UploadModel()), // Add the UploadModel provider
+      ],
       child: FutureBuilder<List<CameraDescription>>(
         future: availableCameras(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             final firstCamera = snapshot.data!.first;
-
             // If it's the first time, display the WelcomeScreen
             // Otherwise, display the CameraApp
             return MaterialApp(
@@ -49,7 +51,7 @@ void main() async {
     ),
   );
 
-  if (isFirstTime != null) {
+  if (isFirstTime != null) {    
     // If it's not the first time, update the value
     await prefs.setBool('firstTime', false);
   }

@@ -13,6 +13,10 @@ import 'package:location/location.dart';
 class RecordingUtil {
   CameraController? controller;
   List<String> videoPaths = [];
+  // local ngrok server
+  String uri = 'https://winning-merely-dodo.ngrok-free.app/upload/';
+  // localhost
+  // String uri = 'http://10.0.2.2:8000/upload/';
 
   /// Constructs a [RecordingUtil] instance with the given [controller].
   RecordingUtil(this.controller);
@@ -63,7 +67,7 @@ class RecordingUtil {
 
   /// Uploads the video at the specified [filePath] using the provided [settingsDataProvider].
   ///
-  /// The video is uploaded to the URL 'http://10.0.2.2:8000/upload/'.
+  /// The video is uploaded to the URL 'uri/upload/'.
   /// The uploaded video's content type is set to 'video/mp4'.
   /// If the upload is successful, the response data is parsed and added to the [settingsDataProvider].
   /// If the upload fails, an exception is thrown.
@@ -77,7 +81,7 @@ class RecordingUtil {
 
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:8000/upload/'),
+        Uri.parse(uri),
       );
       request.files.add(await http.MultipartFile.fromPath(
         'file',

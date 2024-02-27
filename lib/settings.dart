@@ -4,7 +4,7 @@ import 'fileupload.dart';
 import 'package:provider/provider.dart';
 import 'settings_data.dart';
 import 'results.dart';
-
+import 'package:http/http.dart' as http;
 
 /// Represents the settings page of the application.
 /// Allows the user to configure various settings such as server IP address, authentication token, and auto upload feature.
@@ -27,7 +27,7 @@ class SettingsPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ResultsPage(),
+                  builder: (context) => const ResultsPage(),
                 ),
               );
             },
@@ -88,6 +88,18 @@ class SettingsPage extends StatelessWidget {
                 }
               },
             ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              // Test the connection to the IP address and ping the expected message returned from the GET request
+              final response = await http.get(Uri.parse('https://winning-merely-dodo.ngrok-free.app/ping'));
+              if (response.statusCode == 200) {
+                print('Ping successful! Response: ${response.body}');
+              } else {
+                print('Ping failed! Status code: ${response.statusCode}');
+              }
+            },
+            child: const Text('Test Connection'),
           ),
         ],
       ),

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'settings_data.dart';
@@ -127,7 +130,7 @@ class ResultsPageState extends State<ResultsPage> {
 class ResultDetailsPage extends StatefulWidget {
   final Map<String, dynamic> result;
 
-  const ResultDetailsPage({Key? key, required this.result}) : super(key: key);
+  const ResultDetailsPage({super.key, required this.result});
 
   @override
   _ResultDetailsPageState createState() => _ResultDetailsPageState();
@@ -154,11 +157,47 @@ class _ResultDetailsPageState extends State<ResultDetailsPage> {
       ),
       body: ListView(
         children: widget.result.entries.map((entry) {
-          return ListTile(
-            title: Text('${entry.key}: ${entry.value}'),
-          );
+          // Check if the value is a base64 string
+          if (entry.value is String && isBase64(entry.value)) {
+            // Clean the base64 string and decode it to bytes
+            Uint8List bytes = base64Decode(cleanBase64(entry.value));
+            // Display the image
+            return Image.memory(bytes);
+          } else {
+            return ListTile(
+              title: Text('${entry.key}: ${entry.value}'),
+            );
+          }
         }).toList(),
       ),
     );
+  }
+
+  bool isBase64(String str) {
+    final startIndex = str.indexOf(',') + 1;
+    str = str.substring(startIndex);
+    final length = str.length;
+    // Check if the length is a multiple of four
+    if (length < 128) {
+      return false;
+    }
+
+    // Check if the string only contains valid base64 characters
+    if (!RegExp(r'^[A-Za-z0-9+/]*={0,2}$').hasMatch(str)) {
+      return false;
+    }
+
+    try {
+      base64Decode(str);
+    } catch (e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  String cleanBase64(String str) {
+    final startIndex = str.indexOf(',') + 1;
+    return str.substring(startIndex);
   }
 }

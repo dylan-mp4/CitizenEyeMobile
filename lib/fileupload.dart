@@ -6,11 +6,18 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:citizen_eye/settings_data.dart';
 import 'dart:convert';
+
 /// A page for uploading and processing video files.
 ///
 /// This page allows the user to upload a video file, either from the app's storage or from an external source.
 /// The uploaded video file is sent to a server for processing, and the results are displayed in a table.
+import 'package:provider/provider.dart';
+// local ngrok server
+String uri = 'https://winning-merely-dodo.ngrok-free.app/upload/';
+// localhost
+// String uri = 'http://10.0.2.2:8000/upload/';
 class FileUploadPage extends StatefulWidget {
   const FileUploadPage({super.key});
 
@@ -18,16 +25,24 @@ class FileUploadPage extends StatefulWidget {
   FileUploadPageState createState() => FileUploadPageState();
 }
 
-class FileUploadPageState extends State<FileUploadPage> {
-  List<Map<String, dynamic>> results = [];
+enum UploadStatus { idle, uploading, processing, completed, failed }
 
-  /// Displays the results of the video processing.
-  ///
-  /// This method is called when the "Process External Video" button is pressed.
-  /// It prompts the user to select a video file from an external source,
-  /// sends the selected file to the server for processing,
-  /// and updates the results list with the processed data.
-  Future<void> displayResults() async {
+class UploadModel with ChangeNotifier {
+  UploadStatus _status = UploadStatus.idle;
+
+  UploadStatus get status => _status;
+
+  void setStatus(UploadStatus status) {
+    _status = status;
+    notifyListeners();
+  }
+}
+
+class FileUploadPageState extends State<FileUploadPage> {
+  List<dynamic> results = [];
+  String? selectedFilePath;
+
+  Future<void> selectFile() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -36,30 +51,12 @@ class FileUploadPageState extends State<FileUploadPage> {
 
       if (result != null) {
         File file = File(result.files.single.path!);
-
-        var request = http.MultipartRequest(
-          'POST',
-          Uri.parse('http://10.0.2.2:8000/upload/'),
-        );
-        request.files.add(await http.MultipartFile.fromPath(
-          'file',
-          file.path,
-          contentType: MediaType('video', 'mp4'),
-        ));
-        var streamedResponse = await request.send();
-        var response = await http.Response.fromStream(streamedResponse);
-
-        if (response.statusCode == 200) {
-          // Parse the JSON data
-          var data = jsonDecode(response.body);
-
-          // Update the results list
-          setState(() {
-            results = List<Map<String, dynamic>>.from(data);
-          });
-        }
+        setState(() {
+          selectedFilePath = file.path;
+        });
       } else {
         // User canceled the picker
+        print('User canceled the picker');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -68,8 +65,40 @@ class FileUploadPageState extends State<FileUploadPage> {
     }
   }
 
+  Future<void> uploadFile(SettingsData settingsDataProvider, UploadModel uploadModel) async {
+    if (selectedFilePath != null) {
+      uploadModel.setStatus(UploadStatus.processing);
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(uri),
+      );
+      request.files.add(await http.MultipartFile.fromPath(
+        'file',
+        selectedFilePath!,
+        contentType: MediaType('video', 'mp4'),
+      ));
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      if (response.statusCode == 200) {
+        uploadModel.setStatus(UploadStatus.processing);
+        var data = jsonDecode(response.body);
+        List<dynamic> rdata = jsonDecode(response.body);
+        settingsDataProvider.addResult(rdata);
+
+        setState(() {
+          results = List<dynamic>.from(data);
+        });
+        uploadModel.setStatus(UploadStatus.completed);
+      } else {
+        uploadModel.setStatus(UploadStatus.failed);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+     var settingsDataProvider = Provider.of<SettingsData>(context);
+      var uploadModel = Provider.of<UploadModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('File Upload'),
@@ -88,49 +117,34 @@ class FileUploadPageState extends State<FileUploadPage> {
               child: Column(
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: () async {
-                      FilePickerResult? result =
-                          await FilePicker.platform.pickFiles(
-                        type: FileType.custom,
-                        allowedExtensions: ['mp4'],
-                      );
-
-                      if (result != null) {
-                        File file = File(result.files.single.path!);
-
-                        var request = http.MultipartRequest(
-                          'POST',
-                          Uri.parse('http://10.0.2.2:8000/upload/'),
-                        );
-                        request.files.add(await http.MultipartFile.fromPath(
-                          'file',
-                          file.path,
-                          contentType: MediaType('video', 'mp4'),
-                        ));
-                        var streamedResponse = await request.send();
-                        var response =
-                            await http.Response.fromStream(streamedResponse);
-
-                        if (response.statusCode == 200) {
-                          // Parse the JSON data
-                          var data = jsonDecode(response.body);
-
-                          // Update the results list
-                          setState(() {
-                            results = List<Map<String, dynamic>>.from(data);
-                          });
-                        }
-                      } else {
-                        // User canceled the picker
-                      }
-                    },
-                    child: const Text('Process App Video'),
+                    onPressed: selectFile,
+                    child: const Text('Select Video'),
                   ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: displayResults,
-                    child: const Text('Process External Video'),
-                  ),
+                  if (selectedFilePath != null) ...[
+                    Text('Selected file: $selectedFilePath'),
+                    ElevatedButton(
+                      onPressed: () => uploadFile(settingsDataProvider, uploadModel),
+                      child: const Text('Upload Video'),
+                    ),
+                    Consumer<UploadModel>(
+      builder: (context, uploadModel, child) {
+        switch (uploadModel.status) {
+          case UploadStatus.idle:
+            return Text('Idle');
+          case UploadStatus.uploading:
+            return Text('Uploading...');
+          case UploadStatus.processing:
+            return Text('Processing...');
+          case UploadStatus.completed:
+            return Text('Upload completed');
+          case UploadStatus.failed:
+            return Text('Upload failed');
+          default:
+            return Container();
+        }
+      },
+    ),
+                  ],
                 ],
               ),
             ),
@@ -160,12 +174,16 @@ class FileUploadPageState extends State<FileUploadPage> {
                         ),
                       ),
                     ],
-                    rows: results.map<DataRow>((result) => DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text(result['License Plate'] ?? 'N/A')),
-                        DataCell(Text((result['Score'] ?? 'N/A').toString())),
-                      ],
-                    )).toList(),
+                    rows: results
+                        .map<DataRow>((result) => DataRow(
+                              cells: <DataCell>[
+                                DataCell(
+                                    Text(result['License Plate'] ?? 'N/A')),
+                                DataCell(Text(
+                                    (result['Score'] ?? 'N/A').toString())),
+                              ],
+                            ))
+                        .toList(),
                   ),
                 ),
               ),
