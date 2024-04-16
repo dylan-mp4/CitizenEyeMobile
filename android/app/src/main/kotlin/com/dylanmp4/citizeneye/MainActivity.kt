@@ -1,4 +1,4 @@
-package com.example.projects
+package com.dylanmp4.citizeneye
 
 import io.flutter.embedding.android.FlutterActivity
 
