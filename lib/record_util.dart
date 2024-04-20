@@ -14,9 +14,9 @@ class RecordingUtil {
   CameraController? controller;
   List<String> videoPaths = [];
   // local ngrok server
-  String uri = 'https://winning-merely-dodo.ngrok-free.app/upload/';
+  // String uri = 'https://winning-merely-dodo.ngrok-free.app/upload/';
   // localhost
-  // String uri = 'http://10.0.2.2:8000/upload/';
+  String uri = 'http://10.0.2.2:8000/upload';
 
   /// Constructs a [RecordingUtil] instance with the given [controller].
   RecordingUtil(this.controller);

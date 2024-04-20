@@ -1,5 +1,3 @@
-// fileupload.dart
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -8,16 +6,12 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:citizen_eye/settings_data.dart';
 import 'dart:convert';
-
-/// A page for uploading and processing video files.
-///
-/// This page allows the user to upload a video file, either from the app's storage or from an external source.
-/// The uploaded video file is sent to a server for processing, and the results are displayed in a table.
 import 'package:provider/provider.dart';
+
 // local ngrok server
-String uri = 'https://winning-merely-dodo.ngrok-free.app/upload/';
+// String uri = 'https://winning-merely-dodo.ngrok-free.app/upload/';
 // localhost
-// String uri = 'http://10.0.2.2:8000/upload/';
+String uri = 'http://10.0.2.2:8000/upload/';
 class FileUploadPage extends StatefulWidget {
   const FileUploadPage({super.key});
 

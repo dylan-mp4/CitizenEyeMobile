@@ -84,12 +84,12 @@ class ResultsPageState extends State<ResultsPage> {
               List.from(settingsData.results);
           if (dropdownValue == 'License Plate A-Z') {
             sortedResults.sort(
-                (a, b) => a['License Plate'].compareTo(b['License Plate']));
+                (a, b) => a['licence_plate'].compareTo(b['licence_plate']));
           } else if (dropdownValue == 'License Plate Z-A') {
             sortedResults.sort(
-                (a, b) => b['License Plate'].compareTo(a['License Plate']));
-          } else if (dropdownValue == 'Score') {
-            sortedResults.sort((a, b) => b['Score'].compareTo(a['Score']));
+                (a, b) => b['licence_plate'].compareTo(a['licence_plate']));
+          } else if (dropdownValue == 'score') {
+            sortedResults.sort((a, b) => b['score'].compareTo(a['score']));
           } else if (dropdownValue == 'Date Added') {
             sortedResults = sortedResults.reversed.toList();
           }
@@ -101,8 +101,8 @@ class ResultsPageState extends State<ResultsPage> {
             ],
             rows: sortedResults.map((result) {
               return DataRow(cells: [
-                DataCell(Text(result['License Plate'].toString())),
-                DataCell(Text(result['Score'].toString())),
+                DataCell(Text(result['licence_plate'].toString())),
+                DataCell(Text(result['score'].toString())),
                 DataCell(
                   MaterialButton(
                     child: const Text('View'),

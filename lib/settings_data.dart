@@ -8,7 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// This class extends the [ChangeNotifier] class, allowing it to notify listeners when its properties change.
 /// It stores and manages various settings such as IP address, authentication token, auto-upload option, and results.
 class SettingsData extends ChangeNotifier {
-  String _ipAddress = 'https://winning-merely-dodo.ngrok-free.app';
+
+  // String _ipAddress = 'https://winning-merely-dodo.ngrok-free.app';
+  String _ipAddress = 'http://10.0.2.2:8000';
   String _authToken = '';
   bool _autoUpload = false;
   bool _firstTime = true;

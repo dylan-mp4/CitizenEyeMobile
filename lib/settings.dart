@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'fileupload.dart';
 import 'package:provider/provider.dart';
 import 'settings_data.dart';
@@ -35,13 +36,15 @@ class SettingsPage extends StatelessWidget {
           ListTile(
             title: const Text('Server IP Address'),
             subtitle: TextField(
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               decoration: const InputDecoration(
                 hintText: 'Enter IP Address',
               ),
               onChanged: (value) {
                 // Update the server IP address in the settings data provider
-                Provider.of<SettingsData>(context, listen: false).updateIpAddress(value);
+                Provider.of<SettingsData>(context, listen: false)
+                    .updateIpAddress(value);
                 if (kDebugMode) {
                   print("Server IP changed:$value");
                 }
@@ -57,7 +60,8 @@ class SettingsPage extends StatelessWidget {
               ),
               onChanged: (value) {
                 // Update the authentication token in the settings data provider
-                Provider.of<SettingsData>(context, listen: false).updateAuthToken(value);
+                Provider.of<SettingsData>(context, listen: false)
+                    .updateAuthToken(value);
                 if (kDebugMode) {
                   print("Auth value changed:$value");
                 }
@@ -82,7 +86,8 @@ class SettingsPage extends StatelessWidget {
               value: Provider.of<SettingsData>(context).autoUpload,
               onChanged: (value) {
                 // Update the auto upload setting in the settings data provider
-                Provider.of<SettingsData>(context, listen: false).updateAutoUpload(value);
+                Provider.of<SettingsData>(context, listen: false)
+                    .updateAutoUpload(value);
                 if (kDebugMode) {
                   print("Auto upload:$value");
                 }
@@ -91,12 +96,10 @@ class SettingsPage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              // Test the connection to the IP address and ping the expected message returned from the GET request
-              final response = await http.get(Uri.parse('https://winning-merely-dodo.ngrok-free.app/ping'));
-              if (response.statusCode == 200) {
-                print('Ping successful! Response: ${response.body}');
-              } else {
-                print('Ping failed! Status code: ${response.statusCode}');
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              Set<String> keys = prefs.getKeys();
+              for (String key in keys) {
+                print('key: $key, value: ${prefs.get(key)}');
               }
             },
             child: const Text('Test Connection'),
