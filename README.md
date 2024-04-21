@@ -1,4 +1,4 @@
-# Citizen Eye Mobile
+# Citizen Eye Mobile - FYP
 
 Frontent application that uploads videos and recieves data back from API, customizeable server endpoint
 
