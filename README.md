@@ -2,8 +2,6 @@
 
 Frontent application that uploads videos and recieves data back from API, customizeable server endpoint
 
-## Table of Contents
-
 
 ## Installation
 
