@@ -18,10 +18,8 @@ class SettingsData extends ChangeNotifier {
 
   /// Constructs a new instance of [SettingsData].
   /// 
-  /// It initializes the [_results] list, saves the preferences, and loads the preferences.
+  /// load the preferences.
   SettingsData() {
-    _results = [];
-    savePreferences();
     loadPreferences();
   }
 
@@ -72,6 +70,7 @@ class SettingsData extends ChangeNotifier {
   /// It saves the preferences and notifies the listeners.
   void updateFirstTime(bool value) {
     _firstTime = value;
+    print("First time value changed: $value");
     savePreferences();
     notifyListeners();
   }
