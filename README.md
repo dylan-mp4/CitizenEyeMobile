@@ -1,16 +1,22 @@
-# projects
+# Citizen Eye Mobile
 
-CitizenEye
+Frontent application that uploads videos and recieves data back from API, customizeable server endpoint
 
-## Getting Started
+## Table of Contents
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Installation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+# Clone the repository
+git clone https://github.com/dylan-mp4/CitizenEyeMobile.git
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Navigate to the project directory
+cd CitizenEyeMobile
+
+# Install dependencies
+flutter pub get
+
+# Run the project
+flutter run
+```
