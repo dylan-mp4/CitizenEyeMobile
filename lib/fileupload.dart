@@ -1,5 +1,3 @@
-// fileupload.dart
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -8,16 +6,14 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:citizen_eye/settings_data.dart';
 import 'dart:convert';
-
-/// A page for uploading and processing video files.
-///
-/// This page allows the user to upload a video file, either from the app's storage or from an external source.
-/// The uploaded video file is sent to a server for processing, and the results are displayed in a table.
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 // local ngrok server
-String uri = 'https://winning-merely-dodo.ngrok-free.app/upload/';
+// String uri = 'https://winning-merely-dodo.ngrok-free.app/upload';
 // localhost
-// String uri = 'http://10.0.2.2:8000/upload/';
+String uri = 'http://10.0.2.2:8000/upload/';
+
 class FileUploadPage extends StatefulWidget {
   const FileUploadPage({super.key});
 
@@ -41,6 +37,21 @@ class UploadModel with ChangeNotifier {
 class FileUploadPageState extends State<FileUploadPage> {
   List<dynamic> results = [];
   String? selectedFilePath;
+  @override
+  void initState() {
+    super.initState();
+    loadPrefs();
+  }
+
+  void loadPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? ipAddress = prefs.getString('ipAddress');
+    if (ipAddress != null) {
+      setState(() {
+        uri = ipAddress;
+      });
+    }
+  }
 
   Future<void> selectFile() async {
     try {
@@ -56,7 +67,6 @@ class FileUploadPageState extends State<FileUploadPage> {
         });
       } else {
         // User canceled the picker
-        print('User canceled the picker');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -65,7 +75,8 @@ class FileUploadPageState extends State<FileUploadPage> {
     }
   }
 
-  Future<void> uploadFile(SettingsData settingsDataProvider, UploadModel uploadModel) async {
+  Future<void> uploadFile(
+      SettingsData settingsDataProvider, UploadModel uploadModel) async {
     if (selectedFilePath != null) {
       uploadModel.setStatus(UploadStatus.processing);
       var request = http.MultipartRequest(
@@ -97,8 +108,8 @@ class FileUploadPageState extends State<FileUploadPage> {
 
   @override
   Widget build(BuildContext context) {
-     var settingsDataProvider = Provider.of<SettingsData>(context);
-      var uploadModel = Provider.of<UploadModel>(context);
+    var settingsDataProvider = Provider.of<SettingsData>(context);
+    var uploadModel = Provider.of<UploadModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('File Upload'),
@@ -123,27 +134,28 @@ class FileUploadPageState extends State<FileUploadPage> {
                   if (selectedFilePath != null) ...[
                     Text('Selected file: $selectedFilePath'),
                     ElevatedButton(
-                      onPressed: () => uploadFile(settingsDataProvider, uploadModel),
+                      onPressed: () =>
+                          uploadFile(settingsDataProvider, uploadModel),
                       child: const Text('Upload Video'),
                     ),
                     Consumer<UploadModel>(
-      builder: (context, uploadModel, child) {
-        switch (uploadModel.status) {
-          case UploadStatus.idle:
-            return Text('Idle');
-          case UploadStatus.uploading:
-            return Text('Uploading...');
-          case UploadStatus.processing:
-            return Text('Processing...');
-          case UploadStatus.completed:
-            return Text('Upload completed');
-          case UploadStatus.failed:
-            return Text('Upload failed');
-          default:
-            return Container();
-        }
-      },
-    ),
+                      builder: (context, uploadModel, child) {
+                        switch (uploadModel.status) {
+                          case UploadStatus.idle:
+                            return const Text('Idle');
+                          case UploadStatus.uploading:
+                            return const Text('Uploading...');
+                          case UploadStatus.processing:
+                            return const Text('Processing...');
+                          case UploadStatus.completed:
+                            return const Text('Upload completed');
+                          case UploadStatus.failed:
+                            return const Text('Upload failed');
+                          default:
+                            return Container();
+                        }
+                      },
+                    ),
                   ],
                 ],
               ),

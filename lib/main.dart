@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'settings_data.dart';
-import 'fileupload.dart'; // Import the UploadModel
+import 'fileupload.dart';
 import 'package:camera/camera.dart';
 import 'camera_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +22,9 @@ void main() async {
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool? isFirstTime = prefs.getBool('firstTime');
-
+if (isFirstTime == null || isFirstTime == true) {    
+    await prefs.setBool('firstTime', false);
+  }
   runApp(
     MultiProvider(
       providers: [
@@ -50,9 +52,4 @@ void main() async {
       ),
     ),
   );
-
-  if (isFirstTime != null) {    
-    // If it's not the first time, update the value
-    await prefs.setBool('firstTime', false);
-  }
 }

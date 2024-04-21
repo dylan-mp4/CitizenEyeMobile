@@ -8,19 +8,30 @@ import 'dart:convert';
 import 'package:citizen_eye/settings_data.dart';
 import 'package:citizen_eye/location.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// A utility class for recording videos using a camera controller.
 class RecordingUtil {
   CameraController? controller;
   List<String> videoPaths = [];
+  
   // local ngrok server
-  String uri = 'https://winning-merely-dodo.ngrok-free.app/upload/';
+  // String uri = 'https://winning-merely-dodo.ngrok-free.app/upload/';
   // localhost
-  // String uri = 'http://10.0.2.2:8000/upload/';
+  String uri = 'http://10.0.2.2:8000/upload';
 
   /// Constructs a [RecordingUtil] instance with the given [controller].
-  RecordingUtil(this.controller);
+  RecordingUtil(this.controller) {
+    loadPrefs();
+  }
 
+void loadPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? ipAddress = prefs.getString('ipAddress');
+    if (ipAddress != null) {
+      uri = ipAddress;
+    }
+  }
   /// A service for obtaining the device's location.
   LocationService locationService = LocationService();
   LocationData? startLocation;
