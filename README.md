@@ -18,3 +18,30 @@ flutter pub get
 # Run the project
 flutter run
 ```
+## API Reference
+
+#### Upload File
+
+```http
+  POST /upload
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `file` | `video` | **Required**. video to be processed |
+| `start_latitude` | `string` | **Optional**. starting GPS lat |
+| `start_longitude` | `string` | **Optional**. starting GPS lon |
+| `end_latitude` | `string` | **Optional**. ending GPS lat |
+| `end_longitude` | `string` | **Optional**. ending GPS lon |
+
+### Returns
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `licence_plate` | `string` | Licence plate text |
+| `score` | `number(float)` | decimal score / confidence of plate being correct |
+| `car_image` | `string` | Base64 represented image includes starting header |
+| `start_latitude` | `string` | **Optional**. starting GPS lat |
+| `start_longitude` | `string` | **Optional**. starting GPS lon |
+| `end_latitude` | `string` | **Optional**. ending GPS lat |
+| `end_longitude` | `string` | **Optional**. ending GPS lon |
+## Author
