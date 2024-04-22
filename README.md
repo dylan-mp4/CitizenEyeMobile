@@ -4,6 +4,7 @@ Frontent application that uploads videos and recieves data back from API, custom
 
 ## Pre-requisites 
 The application is intended to run on Android devices, therefore an emulator such as Android studio needs to be running
+
 Alternatively the build apk can be installed to an android device.
 ## Installation
 
